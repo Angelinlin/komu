@@ -1,67 +1,33 @@
 "use client";
 import React from "react";
-
-import { motion } from "framer-motion";
-import { slideInFromTop } from "@/utils/motion";
 import Image from "next/image";
 
 const Encryption = () => {
   return (
-    <div className="flex flex-row relative items-center justify-center min-h-screen w-full h-full">
-      <div className="absolute w-auto h-auto top-0 z-[5]">
-        <motion.div
-          variants={slideInFromTop}
-          className="text-[40px] font-medium text-center text-gray-200"
-        >
-          Performance
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
-            {" "}
-            &{" "}
+    <section className="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6 z-20">
+      <Image
+        className="w-full rounded-lg"
+        src="/Arcade2.png"
+        alt="dashboard image"
+        height={350}
+        width={200}
+      ></Image>
+      <div className="mt-0.5">
+        <div className="pl-4 mb-8 border-l-4 border-blue-800 ">
+          <span className="text-sm text-gray-600 uppercase dark:text-gray-400">
+            Who we are?
           </span>
-          Security
-        </motion.div>
-      </div>
-
-      <div className="flex flex-col items-center justify-center translate-y-[-50px] absolute z-[20] w-auto h-auto">
-        <div className="flex flex-col items-center group cursor-pointer w-auto h-auto">
-          <Image
-            src="/LockTop.png"
-            alt="Lock top"
-            width={50}
-            height={50}
-            className="w-[50px] translate-y-5 transition-all duration-200 group-hover:translate-y-11"
-          />
-          <Image
-            src="/LockMain.png"
-            alt="Lock Main"
-            width={70}
-            height={70}
-            className=" z-10"
-          />
+          <h1 className="mt-2 text-3xl font-black text-gray-700 md:text-5xl dark:text-gray-300">
+            About Us
+          </h1>
         </div>
-
-        <div className="Welcome-box px-[15px] py-[4px] z-[20] brder my-[20px] border-[#7042f88b] opacity-[0.9]">
-          <h1 className="Welcome-text text-[12px]">Encryption</h1>
-        </div>
+        <p className="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">
+          Flowbite helps you connect with friends and communities of people who
+          share your interests. Connecting with your friends and family as well
+          as discovering new ones is easy with features like Groups.
+        </p>
       </div>
-      <div className="absolute z-[20] bottom-[10px] px-[5px]">
-        <div className="cursive text-[20px] font-medium text-center text-gray-300">
-          Secure your data with end-to-end encryption
-        </div>
-      </div>
-
-      <div className="w-full flex items-start justify-center absolute">
-        <video
-          loop
-          muted
-          autoPlay
-          playsInline
-          preload="false"
-          className="w-full h-auto"
-          src="/encryption.webm/"
-        />
-      </div>
-    </div>
+    </section>
   );
 };
 
