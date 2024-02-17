@@ -8,6 +8,13 @@ import {
   slideInFromTop,
 } from "@/utils/motion";
 import Image from "next/image";
+import { SignInButton } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
+
+const SignInBut = dynamic(
+  async () => (await import('@clerk/nextjs')).SignInButton,
+  { ssr: false }
+);
 
 const Hero = () => {
   return (
@@ -25,7 +32,7 @@ const Hero = () => {
         >
           <span>
             Welcome to the
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 ">
               {" "}
               Arcade World{" "}
             </span>
@@ -36,21 +43,28 @@ const Hero = () => {
           variants={slideInFromLeft(0.8)}
           className="text-lg text-gray-400 my-5 max-w-[600px]"
         >
-          Where the classic age meets the digital fun
+          Where the classic age meets the digital fun. Enjoy the retro games in
+          virtual reality.
         </motion.p>
-        <motion.a
-          variants={slideInFromLeft(1)}
-          className="py-2 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px]"
-        >
-          Learn More!
-        </motion.a>
+        {/* este boton te mandara para descargar el juego, pero por lo mientras aqui tmb estara el signin */}
+        <SignInBut>
+          <motion.a
+            variants={slideInFromLeft(1)}
+            className="py-2 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px]"
+          >
+            <button>Get Started!</button>
+          </motion.a>
+        </SignInBut>
       </div>
 
       <motion.div
         variants={slideInFromRight(0.8)}
         className="w-full h-full flex justify-center items-center"
       >
-        <Image src="/Arcade.jpg" alt="work icons" height={500} width={500} />
+        {/* cambiar imagen o mas adelante poner algo en 3d o video del juego */}
+        <div className="mt-10">
+          <Image src="/Arcade.jpg" alt="work icons" height={700} width={700} />
+        </div>
       </motion.div>
     </motion.div>
   );

@@ -4,7 +4,7 @@ import { ClerkProvider, auth } from "@clerk/nextjs";
 import "./globals.css";
 import StarsCanvas from "@/components/main/StarBackground";
 import Navbar from "@/components/main/Navbar";
-import Footer from "@/components/main/Footer";
+import ToasterContext from "@/components/hooks/toaterProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,17 +18,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = auth();
 
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}
-      >
-        <StarsCanvas />
-        <Navbar />
-        {children}
-        <Footer />
+      <body className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`} >
+        <ToasterContext>
+          <ClerkProvider>
+            <StarsCanvas />
+            <Navbar />
+            {children}
+          </ClerkProvider>
+        </ToasterContext>
       </body>
     </html>
   );
