@@ -8,7 +8,7 @@ import { PiVirtualRealityFill } from "react-icons/pi";
 
 const About = () => {
   return (
-    <section className="flex items-center0 xl:h-screen mt-20 z-[20]">
+    <section className="flex items-center0 xl:h-screen mt-20 z-[20]" id="about">
       <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
         <div className="px-4 mb-10 md:text-center md:mb-20">
           <p className="mb-2 text-lg font-semibold text-blue-500 dark:text-gray-400">

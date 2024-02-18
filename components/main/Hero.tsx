@@ -8,6 +8,7 @@ import {
 } from "@/utils/motion";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useUser } from "@clerk/nextjs";
 
 const SignInBut = dynamic(
   async () => (await import('@clerk/nextjs')).SignInButton,
@@ -15,6 +16,7 @@ const SignInBut = dynamic(
 );
 
 const Hero = () => {
+  const user = useUser();
   return (
     <motion.div
       initial="hidden"

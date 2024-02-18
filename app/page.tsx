@@ -4,6 +4,7 @@ import ContactUs from "@/components/sub/ContactUs";
 import About from "@/components/main/About";
 import Gallery from "@/components/main/Gallery";
 import Footer from "@/components/main/Footer";
+import FaQs from "@/components/main/FaQs";
 
 export default function Home() {
   return (
@@ -12,8 +13,9 @@ export default function Home() {
         <Hero />
         <About />
         <Gallery />
-        <MapSection />
+        <FaQs />
         <ContactUs />
+        <MapSection />
         <Footer />
       </div>
       {/* <UserButton afterSignOutUrl="/" /> */}

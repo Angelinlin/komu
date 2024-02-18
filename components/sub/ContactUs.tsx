@@ -35,6 +35,10 @@ export default function ContactUs() {
         success: 'Email Sent',
         error: 'Failed to send email'
       });
+       // Reset form fields after successful email send
+       form.email.value = '';
+       form.userFirstname.value = '';
+       form.textarea.value = '';
     } catch (e) {
       toast.error('Failed to send email');
     }
@@ -42,7 +46,7 @@ export default function ContactUs() {
   }
 
   return (
-    <div className='w-screen flex flex-col items-center justify-center py-24 md:px-8 bg-gray-900 bg-opacity-50'>
+    <div id='contact' className='w-screen flex flex-col items-center justify-center py-24 md:px-8 bg-gray-900 bg-opacity-50'>
       <div className='text-center pb-8'>
       <IoMail className="text-4xl text-white mx-auto mb-2" />
         <h1 className='text-4xl text-white'>

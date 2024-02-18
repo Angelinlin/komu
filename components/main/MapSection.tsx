@@ -1,7 +1,13 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import MapComponent from '../sub/MapComponent'
 
 function MapSection() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  }
   return (
     <>
       <div className="mx-auto w-[100%] md:max-w-7xl py-12 px-12">
@@ -37,6 +43,7 @@ function MapSection() {
           </div>
         </div>
       </div>
+      
     </>
   )
 }
