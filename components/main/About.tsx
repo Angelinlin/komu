@@ -60,13 +60,13 @@ const About = () => {
                 Built exclusively for VR
               </li>
             </ul>
-            <button
-              type="button"
+            <a
+              href="https://nextjs-commerce-dun-three.vercel.app/search?q=nft"
               className="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-purple-800 rounded-lg hover:bg-purple-950 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-800 dark:hover:bg-purple-950 dark:focus:ring-purple-800"
             >
               <FaCartShopping className="mr-2" />
-              Download Now
-            </button>
+              Buy now
+            </a>
           </div>
         </div>
       </div>

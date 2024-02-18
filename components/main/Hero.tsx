@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { motion } from "framer-motion";
 import {
@@ -8,7 +7,6 @@ import {
   slideInFromTop,
 } from "@/utils/motion";
 import Image from "next/image";
-import { SignInButton } from "@clerk/nextjs";
 import dynamic from "next/dynamic";
 
 const SignInBut = dynamic(
@@ -63,7 +61,7 @@ const Hero = () => {
       >
         {/* cambiar imagen o mas adelante poner algo en 3d o video del juego */}
         <div className="mt-10">
-          <Image src="/Arcade.jpg" alt="work icons" height={700} width={700} />
+          <Image src="/arcade.jpg" alt="work icons" height={700} width={700} ></Image>
         </div>
       </motion.div>
     </motion.div>

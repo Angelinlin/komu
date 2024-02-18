@@ -12,7 +12,7 @@ export async function sendEmailTest(Inputs: Inputs) {
   const { email, userFirstname, textarea } = Inputs;
 
   const { data, error } = await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: 'notreply@komuarcade.lat',
     to: [email],
     subject: 'Thank you for contacting us!',
     react: WelcomeEmail({ userFirstname }),
