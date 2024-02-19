@@ -71,6 +71,8 @@ export default function ContactUs() {
           <button type='submit' className="p-2 rounded-md hover:bg-purple-600 transition duration-200">Send email</button>
         </form>
       </div>
+      <p className='text-white pt-4'>If you have more questions you can see our politics <a target='_blank' href='https://peridot-strand-b88.notion.site/Komu-Arcade-Support-47306b9651a8422fbf1588e42d46e13a' className='cursor-pointer hover:text-purple-500 underline'>here</a>?</p>
+
     </div>
   );
 }
