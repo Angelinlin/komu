@@ -1,25 +1,55 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiAlignJustify } from "react-icons/fi";
-import { useUser } from "@clerk/nextjs";
-import { UserButton } from "@clerk/nextjs";
-import dynamic from "next/dynamic";
-
-const SignInBut = dynamic(
-  async () => (await import('@clerk/nextjs')).SignInButton,
-  { ssr: false }
-);
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../hooks/firebase/config'
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Navbar = () => {
-  const { user } = useUser();
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [user, loading, error] = useAuthState(auth);
+  const [userSession, setUserSession] = useState<string | null>(null);
+  const route = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // El usuario ha iniciado sesión
+        setUserSession(sessionStorage.getItem('user'));
+        toast.success('Welcome back ');
+      } else {
+        // El usuario ha cerrado sesión
+        setUserSession(null);
+      }
+    });
+
+    // Limpia la suscripción al desmontar el componente
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setUserSession(user ? sessionStorage.getItem('user') : null);
+    }
+  }, [user, loading]);
+
+  const SignOutBut = () => {
+    if (user) {
+      auth.signOut();
+      sessionStorage.removeItem('user');
+      toast.success('Sign out successfully');
+      route.push('/');
+    }
+  }
 
   const handleNavToggle = () => {
     setNavbarOpen(!navbarOpen);
   };
+
   const navBarStyles =
     "cursor-pointer hover:text-purple-600 transition duration-300 border-b-2 border-transparent hover:border-purple-600";
 
@@ -28,8 +58,7 @@ const Navbar = () => {
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
-            {/* LOGO */}
-            <Link href="#about-me">
+            <Link href="/">
               <div className="h-auto w-auto flex flex-row items-center mr-8">
                 <Image
                   src="/billy_nofondo.png"
@@ -40,7 +69,6 @@ const Navbar = () => {
                 />
               </div>
             </Link>
-            {/* HAMBURGER BUTTON FOR MOBILE */}
             <div className="md:hidden">
               <button
                 className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
@@ -72,38 +100,67 @@ const Navbar = () => {
                   <p className={navBarStyles}>Contact</p>
                 </Link>
               </li>
-              
+
               <li className="block md:hidden items-center justify-center">
-                {user ? (
-                  <UserButton />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <SignInBut>
-                      <button className=" inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <div className="w-full h-full flex items-center justify-center flex-col gap-2">
+                  {
+                    user && userSession ? (
+                      <>
+                        <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                          <div className={navBarStyles}>
+                            Market
+                          </div>
+                        </Link>
+                        <Link href="/dashboard" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                          <div className={navBarStyles}>
+                            profile
+                          </div>
+                        </Link>
+                        <button onClick={SignOutBut} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                          Sign out
+                        </button>
+                      </>
+                    ) : (
+                      <Link href="/signin" className=" inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
                         <span className=" px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                           Sign In
                         </span>
-                      </button>
-                    </SignInBut>
-                  </div>
-                )}
+                      </Link>
+                    )
+                  }
+                </div>
               </li>
             </ul>
           </div>
 
         </div>
-        <div className=" hidden md:block justify-center items-center md:flex-row md:gap-5 text-white text-sm ml-3 mt-4">
-          {user ? (
-            <UserButton />
-          ) : (
-            <SignInBut>
-              <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+        <div className="hidden md:block items-center justify-center">
+          {/* <SignOutBut> */}
+          {
+            user && userSession ? (
+              <div className="flex flex-row gap-1">
+                <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                  <div className={navBarStyles}>
+                    Market
+                  </div>
+                </Link>
+                <Link href="/dashboard" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                  <div className={navBarStyles}>
+                    profile
+                  </div>
+                </Link>
+                <button onClick={SignOutBut} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <Link href="/signin" className="inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <span className=" px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                   Sign In
                 </span>
-              </button>
-            </SignInBut>
-          )}
+              </Link>
+            )
+          }
         </div>
       </div>
     </nav>

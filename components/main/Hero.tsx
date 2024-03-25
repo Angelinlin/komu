@@ -7,16 +7,9 @@ import {
   slideInFromTop,
 } from "@/utils/motion";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import { useUser } from "@clerk/nextjs";
-
-const SignInBut = dynamic(
-  async () => (await import('@clerk/nextjs')).SignInButton,
-  { ssr: false }
-);
 
 const Hero = () => {
-  const user = useUser();
+
   return (
     <motion.div
       initial="hidden"
@@ -47,14 +40,14 @@ const Hero = () => {
           virtual reality.
         </motion.p>
         {/* este boton te mandara para descargar el juego, pero por lo mientras aqui tmb estara el signin */}
-        <SignInBut>
-          <motion.a
-            variants={slideInFromLeft(1)}
-            className="py-2 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px]"
-          >
-            <button>Get Started!</button>
-          </motion.a>
-        </SignInBut>
+        {/* <SignInBut> */}
+        <motion.a
+          variants={slideInFromLeft(1)}
+          className="py-2 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px] "
+        >
+          Get started!
+        </motion.a>
+        {/* </SignInBut> */}
       </div>
 
       <motion.div

@@ -15,7 +15,7 @@ export async function sendEmailTest(Inputs: Inputs) {
     from: 'notreply@komuarcade.lat',
     to: [email],
     subject: 'Thank you for contacting us!',
-    react: WelcomeEmail({ userFirstname }),
+    react: WelcomeEmail({ userFirstname, referUrl: 'https://hashcapital.io'}),
   });
   
 

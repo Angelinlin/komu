@@ -1,11 +1,11 @@
 "use client";
-import { SignIn } from "@clerk/nextjs";
+import SignInSect from "@/components/main/SignIn";
 import React from "react";
 
 function page() {
   return (
     <div className="flex items-center justify-center h-full">
-      <SignIn />
+      <SignInSect />
     </div>
   );
 }

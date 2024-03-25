@@ -14,8 +14,8 @@ export default function Home() {
         <About />
         <Gallery />
         <FaQs />
-        <ContactUs />
-        <MapSection />
+        {/* <ContactUs /> */}
+        {/* <MapSection /> */}
         <Footer />
       </div>
       {/* <UserButton afterSignOutUrl="/" /> */}

@@ -1,5 +1,5 @@
 "use client";
-import { SignUp } from "@clerk/nextjs";
+import SignUp from "@/components/main/SignUp";
 import React from "react";
 
 function page() {
