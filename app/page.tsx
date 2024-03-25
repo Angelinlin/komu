@@ -1,5 +1,4 @@
 import Hero from "@/components/main/Hero";
-import MapSection from "@/components/main/MapSection";
 import ContactUs from "@/components/sub/ContactUs";
 import About from "@/components/main/About";
 import Gallery from "@/components/main/Gallery";
