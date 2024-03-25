@@ -148,10 +148,10 @@ export default function NftStore() {
                                                 />
                                                 {
                                                     nfts.function == false ?
-                                                        <Lottie className='absolute top-2 right-2 h-3.5 w-3.5' animationData={redB} loop={true} />
+                                                        <Lottie className='absolute top-3 right-3 h-6 w-6' animationData={redB} loop={true} />
                                                         :
                                                         <Lottie
-                                                            className="absolute top-2 right-2 "
+                                                            className="absolute top-2 right-2 h-8 w-8"
                                                             animationData={greenB}
                                                             loop={true}
                                                         />

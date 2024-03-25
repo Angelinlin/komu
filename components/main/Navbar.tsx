@@ -16,15 +16,17 @@ const Navbar = () => {
   const route = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // El usuario ha iniciado sesión
-        setUserSession(sessionStorage.getItem('user'));
-        toast.success('Welcome back ');
-      } else {
-        // El usuario ha cerrado sesión
-        setUserSession(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (loading) => {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          // El usuario ha iniciado sesión
+          setUserSession(sessionStorage.getItem('user'));
+          toast.success('Welcome back ');
+        } else {
+          // El usuario ha cerrado sesión
+          setUserSession(null);
+        }
+      });
     });
 
     // Limpia la suscripción al desmontar el componente
@@ -106,17 +108,17 @@ const Navbar = () => {
                   {
                     user && userSession ? (
                       <>
-                        <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                        <Link href="/market" className="text-white rounded-full px-4">
                           <div className={navBarStyles}>
                             Market
                           </div>
                         </Link>
-                        <Link href="/dashboard" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                        <Link href="/dashboard" className="text-white rounded-full px-4">
                           <div className={navBarStyles}>
                             profile
                           </div>
                         </Link>
-                        <button onClick={SignOutBut} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                        <button onClick={SignOutBut} className="text-white rounded-full px-4">
                           Sign out
                         </button>
                       </>
