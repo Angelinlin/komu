@@ -22,6 +22,13 @@ type Nft = {
 }
 
 export default function NftStore() {
+    const router = useRouter();
+    const user = useAuthState(auth);
+
+    if (!user) {
+        toast.error('You are not logged in');
+        router.push('/login');
+    }
 
     const wallet = useWallet();
     const clusterString = "devnet"
@@ -72,14 +79,7 @@ export default function NftStore() {
     }
 
 
-    const user = useAuthState(auth);
 
-    const router = useRouter();
-
-    if (!user) {
-        toast.error('You are not logged in');
-        router.push('/login');
-    }
     const nft = [
         {
             name: 'First touch',
@@ -92,7 +92,7 @@ export default function NftStore() {
             name: 'Nomad Tumbler',
             price: 2.5,
             image: '/arcade.jpg',
-            function: true,
+            function: false,
             metadata: 'https://bafkreidy6ccc4bnqk3kqpqteibnumlxl27evlwmzxbem3t5cqyvgznnbeu.ipfs.nftstorage.link'
         },
         {

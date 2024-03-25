@@ -11,38 +11,25 @@ import { onAuthStateChanged } from "firebase/auth";
 
 const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [user, loading, error] = useAuthState(auth);
-  const [userSession, setUserSession] = useState<string | null>(null);
+  const [user, loading] = useAuthState(auth);
   const route = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (loading) => {
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          // El usuario ha iniciado sesión
-          setUserSession(sessionStorage.getItem('user'));
-          toast.success('Welcome back ');
-        } else {
-          // El usuario ha cerrado sesión
-          setUserSession(null);
-        }
-      });
-    });
-
-    // Limpia la suscripción al desmontar el componente
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
     if (!loading) {
-      setUserSession(user ? sessionStorage.getItem('user') : null);
+      if (user) {
+        // The user is signed in
+        toast.success('Welcome back ');
+      } else {
+        // The user is signed out
+        toast.success('Sign out successfully');
+        route.push('/');
+      }
     }
   }, [user, loading]);
 
   const SignOutBut = () => {
     if (user) {
       auth.signOut();
-      sessionStorage.removeItem('user');
       toast.success('Sign out successfully');
       route.push('/');
     }
@@ -106,7 +93,7 @@ const Navbar = () => {
               <li className="block md:hidden items-center justify-center">
                 <div className="w-full h-full flex items-center justify-center flex-col gap-2">
                   {
-                    user && userSession ? (
+                    user ? (
                       <>
                         <Link href="/market" className="text-white rounded-full px-4">
                           <div className={navBarStyles}>
@@ -139,7 +126,7 @@ const Navbar = () => {
         <div className="hidden md:block items-center justify-center">
           {/* <SignOutBut> */}
           {
-            user && userSession ? (
+            user ? (
               <div className="flex flex-row gap-1">
                 <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
                   <div className={navBarStyles}>
