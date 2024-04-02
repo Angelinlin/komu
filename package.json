@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/firebase-adapter": "^1.5.1",
     "@heroicons/react": "^2.0.18",
     "@metaplex-foundation/js": "^0.19.5",
     "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
@@ -16,9 +17,11 @@
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/web3.js": "^1.90.0",
     "firebase": "^10.8.0",
-    "next": "^14.1.0",
-    "pigeon-maps": "^0.21.3",
+    "firebase-admin": "^11.11.1",
     "lottie-react": "^2.4.0",
+    "next": "^14.1.0",
+    "next-auth": "^4.24.7",
+    "pigeon-maps": "^0.21.3",
     "react": "^18",
     "react-dom": "^18",
     "react-email": "^2.0.0",

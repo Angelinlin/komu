@@ -1,39 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiAlignJustify } from "react-icons/fi";
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../hooks/firebase/config'
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [user, loading] = useAuthState(auth);
-  const route = useRouter();
-
-  useEffect(() => {
-    if (!loading) {
-      if (user) {
-        // The user is signed in
-        toast.success('Welcome back ');
-      } else {
-        // The user is signed out
-        toast.success('Sign out successfully');
-        route.push('/');
-      }
-    }
-  }, [user, loading]);
-
-  const SignOutBut = () => {
-    if (user) {
-      auth.signOut();
-      toast.success('Sign out successfully');
-      route.push('/');
-    }
-  }
 
   const handleNavToggle = () => {
     setNavbarOpen(!navbarOpen);
@@ -90,10 +65,10 @@ const Navbar = () => {
                 </Link>
               </li>
 
-              <li className="block md:hidden items-center justify-center">
+              {/* <li className="block md:hidden items-center justify-center">
                 <div className="w-full h-full flex items-center justify-center flex-col gap-2">
                   {
-                    user ? (
+                    session ? (
                       <>
                         <Link href="/market" className="text-white rounded-full px-4">
                           <div className={navBarStyles}>
@@ -105,7 +80,7 @@ const Navbar = () => {
                             profile
                           </div>
                         </Link>
-                        <button onClick={SignOutBut} className="text-white rounded-full px-4">
+                        <button onClick={() => { signOut() }} className="text-white rounded-full px-4">
                           Sign out
                         </button>
                       </>
@@ -118,7 +93,7 @@ const Navbar = () => {
                     )
                   }
                 </div>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -126,7 +101,7 @@ const Navbar = () => {
         <div className="hidden md:block items-center justify-center">
           {/* <SignOutBut> */}
           {
-            user ? (
+            session ? (
               <div className="flex flex-row gap-1">
                 <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
                   <div className={navBarStyles}>
@@ -138,7 +113,7 @@ const Navbar = () => {
                     profile
                   </div>
                 </Link>
-                <button onClick={SignOutBut} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+                <button onClick={() => { signOut() }} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
                   Sign out
                 </button>
               </div>

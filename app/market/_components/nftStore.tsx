@@ -1,8 +1,5 @@
 "use client"
-import { auth } from '@/components/hooks/firebase/config';
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Metaplex, walletAdapterIdentity, bundlrStorage } from '@metaplex-foundation/js';
 import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
@@ -22,13 +19,11 @@ type Nft = {
 }
 
 export default function NftStore() {
-    const router = useRouter();
-    const user = useAuthState(auth);
 
-    if (!user) {
-        toast.error('You are not logged in');
-        router.push('/login');
-    }
+    // if (!user) {
+    //     toast.error('You are not logged in');
+    //     router.push('/login');
+    // }
 
     const wallet = useWallet();
     const clusterString = "devnet"
@@ -120,10 +115,6 @@ export default function NftStore() {
         else {
             toast.error('Wallet not connected');
         }
-        if (!user) {
-            toast.error('You are not logged in');
-            router.push('/login');
-        }
     }, [])
 
     return (
@@ -171,4 +162,3 @@ export default function NftStore() {
         </>
     )
 }
-
