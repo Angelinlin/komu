@@ -65,7 +65,7 @@ const Navbar = () => {
                 </Link>
               </li>
 
-              {/* <li className="block md:hidden items-center justify-center">
+              <li className="block md:hidden items-center justify-center">
                 <div className="w-full h-full flex items-center justify-center flex-col gap-2">
                   {
                     session ? (
@@ -93,7 +93,7 @@ const Navbar = () => {
                     )
                   }
                 </div>
-              </li> */}
+              </li>
             </ul>
           </div>
 
