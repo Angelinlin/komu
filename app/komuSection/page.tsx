@@ -6,12 +6,12 @@ import { redirect } from 'next/navigation';
 
 export default function StoreNFT() {
 
-    const { data: session } = useSession()
-
-    if (!session) {
-        console.log('no session')
-        redirect('/signin');
-    }
+    const session = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/signin')
+        }
+    })
 
     return (
         <div className='w-full h-auto flex items-center justify-center'>

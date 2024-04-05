@@ -8,13 +8,7 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 export default function GridProf() {
-    const session = useSession({
-        required: true,
-        onUnauthenticated() {
-            toast.error('You need to sign in');
-            redirect('/signin');
-        }
-    });
+
 
     const wallet = useWallet();
 

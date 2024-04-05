@@ -21,14 +21,7 @@ type Nft = {
 }
 
 export default function NftStore() {
-    const session = useSession({
-        required: true,
-        onUnauthenticated() {
-            toast.error('You need to sign in');
-            redirect('/signin');
-        }
 
-    })
 
     // if (!user) {
     //     toast.error('You are not logged in');
