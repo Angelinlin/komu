@@ -48,7 +48,7 @@ export default function GridProf() {
                                 return (
                                     <a key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800" href="#">
                                         <div className="aspect-w-16 aspect-h-9">
-                                            <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src="/arcade.jpg" alt="Image Description" />
+                                            <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src="/FisrtTouch.png" alt="Image Description" />
                                         </div>
                                         <div className="p-4 md:p-5">
                                             <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
