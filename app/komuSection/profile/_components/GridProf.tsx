@@ -1,29 +1,50 @@
 "use client"
 import { useWallet } from '@solana/wallet-adapter-react';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/components/hooks/firebase/config';
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 
 export default function GridProf() {
 
 
     const wallet = useWallet();
+    const { data: session } = useSession()
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
         toast.success('Wallet copied');
     }
+
+    const getTicketsFire = async () => {
+        // const q = query(collection(db, "tickets"), where("idUser", "==", "sadsdaadsr334"));
+        // onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+        //     snapshot.docChanges().forEach((change) => {
+        //         if (change.type === "added") {
+        //             console.log("New city: ", change.doc.data());
+        //         }
+
+        //         const source = snapshot.metadata.fromCache ? "local cache" : "server";
+        //         console.log("Data came from " + source);
+        //     });
+        // });
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()}`);
+        });
+    }
+
     return (
         <>
-            <div className='flex flex-col-reverse lg:flex-row px-8 md:px-24 min-h-screen justify-center items-center gap-16'>
+            <div className='flex flex-col-reverse lg:flex-row px-8 md:px-24 pt-14 md:pt-0 min-h-screen justify-center items-center gap-16'>
                 <div className='h-[80vh] w-[90%] lg:w-1/2 text-white  rounded-md pt-8 px-1 overflow-y-hidden overflow-y-scroll scrollbar-hidden'>
                     <h1 className='text-base font-mono absolute ml-6 p-1 rounded-xl bg-purple-600 '>Items</h1>
                     <div className='grid w-full sm:grid-cols-2 gap-4 mb-10 lg:mb-14 p-8 '>
                         {
-                            [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
+                            [1, 2,].map((item, index) => {
                                 return (
                                     <a key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800" href="#">
                                         <div className="aspect-w-16 aspect-h-9">
@@ -31,10 +52,10 @@ export default function GridProf() {
                                         </div>
                                         <div className="p-4 md:p-5">
                                             <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                                                Business
+                                                Komu
                                             </p>
                                             <h3 className="mt-2 text-xs font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white">
-                                                Should Product Owners think like entrepreneurs?
+                                                First touch
                                             </h3>
                                         </div>
                                     </a>
@@ -49,7 +70,7 @@ export default function GridProf() {
                         <div className="flex-1 bg-white bg-opacity-5 text-white p-4 shadow rounded-lg md:w-1/2">
                             <h2 className=" text-base font-mono pb-1">Email</h2>
                             <div className="my-1">
-                                angel.muncerv@outook.com
+                                {session?.user?.email}
                             </div>
 
                         </div>
@@ -103,19 +124,19 @@ export default function GridProf() {
                             <tbody>
                                 <tr className="hover:bg-grey-lighter text-center">
                                     <td className="py-2 px-4 border-b border-grey-light">
-                                        Komu
+                                        First touch
                                     </td>
                                     <td className="py-2 px-4 border-b border-grey-light">
                                         Space
                                     </td>
                                     <td className="py-2 px-4 border-b border-grey-light">
-                                        1
+                                        2
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <div className="text-right mt-4">
-                            <button className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
+                            <button onClick={() => { getTicketsFire() }} className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
                                 Ver más
                             </button>
                         </div>
