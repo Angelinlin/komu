@@ -1,13 +1,12 @@
 'use client';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const router = useRouter();
 
     const handleSignin = async () => {
         await signIn('credentials', { email, password, redirect: true, callbackUrl: '/' })
@@ -55,7 +54,7 @@ export default function Signin() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <div onClick={() => router.push('/forgot-password')} className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
+                                    <div onClick={() => redirect('/forgot-password')} className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
                                         Forgot password?
                                     </div>
                                 </div>
@@ -86,7 +85,7 @@ export default function Signin() {
 
                     <p className="mt-10 text-center text-sm text-gray-400">
                         Not a member?{' '}
-                        <button onClick={() => router.push('signup')} className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
+                        <button onClick={() => redirect('/signup')} className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
                             Sign Up
                         </button>
                     </p>

@@ -13,6 +13,7 @@ export default function StoreNFT() {
         }
     })
 
+
     return (
         <div className='w-full h-auto flex items-center justify-center'>
             {/* {session?.data?.user?.email} */}
