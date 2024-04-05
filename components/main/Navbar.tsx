@@ -70,19 +70,17 @@ const Navbar = () => {
                   {
                     session ? (
                       <>
-                        <Link href="/market" className="text-white rounded-full px-4">
+                        <Link href="/komuSection" className="text-white rounded-full px-4">
                           <div className={navBarStyles}>
                             Market
                           </div>
                         </Link>
-                        <Link href="/dashboard" className="text-white rounded-full px-4">
-                          <div className={navBarStyles}>
-                            profile
-                          </div>
-                        </Link>
-                        <button onClick={() => { signOut() }} className="text-white rounded-full px-4">
-                          Sign out
-                        </button>
+                        <div className='h-full w-32 items-center justify-center md:block hidden'>
+                          <button className='text-white cursor-pointer hover:text-red-300 transition duration-300 border-b-2 border-transparent hover:border-red-500'
+                            onClick={() => { signOut() }}>
+                            Sign out
+                          </button>
+                        </div>
                       </>
                     ) : (
                       <Link href="/signin" className=" inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
@@ -102,20 +100,18 @@ const Navbar = () => {
           {/* <SignOutBut> */}
           {
             session ? (
-              <div className="flex flex-row gap-1">
-                <Link href="/market" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
+              <div className="flex flex-row gap-2 items-center justify-center">
+                <Link href="/komuSection" className="text-white rounded-full py-2 px-4">
                   <div className={navBarStyles}>
                     Market
                   </div>
                 </Link>
-                <Link href="/dashboard" className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
-                  <div className={navBarStyles}>
-                    profile
-                  </div>
-                </Link>
-                <button onClick={() => { signOut() }} className="text-white border bg-[#0300145e] border-[#7042f861] rounded-full py-2 px-4">
-                  Sign out
-                </button>
+                <div className='h-full w-32 items-center justify-center md:block hidden'>
+                  <button className='text-white cursor-pointer hover:text-red-300 transition duration-300 border-b-2 border-transparent hover:border-red-500'
+                    onClick={() => { signOut() }}>
+                    Sign out
+                  </button>
+                </div>
               </div>
             ) : (
               <Link href="/signin" className="inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">

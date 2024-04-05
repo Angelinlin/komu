@@ -9,6 +9,8 @@ import WalletButton from '@/components/sub/Wallet/WalletButton';
 import Lottie from "lottie-react";
 import greenB from '@/public/greenB.json';
 import redB from '@/public/redB.json';
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 type Nft = {
     name: string,
@@ -19,6 +21,14 @@ type Nft = {
 }
 
 export default function NftStore() {
+    const session = useSession({
+        required: true,
+        onUnauthenticated() {
+            toast.error('You need to sign in');
+            redirect('/signin');
+        }
+
+    })
 
     // if (!user) {
     //     toast.error('You are not logged in');
@@ -26,7 +36,8 @@ export default function NftStore() {
     // }
 
     const wallet = useWallet();
-    const clusterString = "devnet"
+    const clusterString = "devnet";
+    const url = process.env.RPC_URL;
     const publicKeyCreator = new PublicKey('9tMv2JKCzwXbYx5Eey3NpqNYaTjeTcpLSXZYeEmUdXP2');
 
     const connection = new Connection(clusterApiUrl(clusterString))
@@ -34,9 +45,9 @@ export default function NftStore() {
         .use(walletAdapterIdentity(wallet))
         .use(bundlrStorage({
             address: 'https://devnet.bundlr.network',
-            providerUrl: 'https://api.devnet.solana.com',
+            providerUrl: url,
             timeout: 60000,
-        }))
+        }));
 
 
     const mint = async (metadata: Nft) => {
@@ -50,6 +61,7 @@ export default function NftStore() {
             symbol: "KFNT",
             sellerFeeBasisPoints: 500,
             tokenOwner: wallet.publicKey as PublicKey,
+
             tokenStandard: TokenStandard.FungibleAsset,
             creators: [
                 {
@@ -57,19 +69,22 @@ export default function NftStore() {
                     share: 100,
                 }
             ],
-        })
+        });
         try {
             // Submit the transaction
             const { signature } = await metaplex.rpc().sendAndConfirmTransaction(nftBuilder, { commitment: 'confirmed' });
-            const { mintAddress } = nftBuilder.getContext();
-            console.log(mintAddress.toBase58())
-            console.log(signature)
+            // const { mintAddress } = nftBuilder.getContext();
+            // console.log(mintAddress.toBase58())
+            // console.log(signature)
             toast.dismiss();
-            toast.success('NFT minted successfully');
+            console.log(signature)
         } catch (e) {
             toast.dismiss();
             toast.error('Error minting NFT');
         }
+
+
+
 
     }
 
@@ -115,7 +130,7 @@ export default function NftStore() {
         else {
             toast.error('Wallet not connected');
         }
-    }, [])
+    }, []);
 
     return (
         <>
@@ -128,31 +143,31 @@ export default function NftStore() {
                     <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                         {
                             nft.map((nfts, index) => (
-                                <>
-                                    <div key={index}>
-                                        <div className="group relative cursor-pointer">
-                                            <button onClick={() => { mint(nfts) }} className="w-full h-80 bg-black rounded-lg overflow-hidden group-hover:opacity-75">
-                                                <img
-                                                    src={nfts.image}
-                                                    alt={nfts.name}
-                                                    className="w-full h-full object-center object-cover"
-                                                />
-                                                {
-                                                    nfts.function == false ?
-                                                        <Lottie className='absolute top-3 right-3 h-6 w-6' animationData={redB} loop={true} />
-                                                        :
-                                                        <Lottie
-                                                            className="absolute top-2 right-2 h-8 w-8"
-                                                            animationData={greenB}
-                                                            loop={true}
-                                                        />
-                                                }
-                                            </button>
-                                        </div>
-                                        <h3 className="mt-4 text-sm text-zinc-300">{nfts.name}</h3>
-                                        <p className="mt-1 text-xs font-medium text-zinc-200">{nfts.price}</p>
+
+                                <div key={index}>
+                                    <div className="group relative cursor-pointer">
+                                        <button onClick={() => { mint(nfts) }} className="w-full h-80 bg-black rounded-lg overflow-hidden group-hover:opacity-75">
+                                            <img
+                                                src={nfts.image}
+                                                alt={nfts.name}
+                                                className="w-full h-full object-center object-cover"
+                                            />
+                                            {
+                                                nfts.function == false ?
+                                                    <Lottie className='absolute top-3 right-3 h-6 w-6' animationData={redB} loop={true} />
+                                                    :
+                                                    <Lottie
+                                                        className="absolute top-2 right-2 h-8 w-8"
+                                                        animationData={greenB}
+                                                        loop={true}
+                                                    />
+                                            }
+                                        </button>
                                     </div>
-                                </>
+                                    <h3 className="mt-4 text-sm text-zinc-300">{nfts.name}</h3>
+                                    <p className="mt-1 text-xs font-medium text-zinc-200">{nfts.price}</p>
+                                </div>
+
                             ))
                         }
 
