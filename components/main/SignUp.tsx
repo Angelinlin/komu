@@ -3,12 +3,12 @@ import { FormEvent, useState } from 'react';
 import { auth } from '../hooks/firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import { createTicketUser } from '@/lib/functions';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const router = useRouter();
 
     const validatePassword = (password: string) => {
         const hasUpperCase = /[A-Z]/.test(password);
@@ -27,15 +27,16 @@ const SignUp = () => {
             }
 
             console.log({ email, password })
-            const res = await createUserWithEmailAndPassword(auth, email, password);
-            if (!res) {
-                toast.error('Failed to create an account');
-                return;
-            }
-            toast.success('Account created successfully');
-            setEmail('');
-            setPassword('')
-            router.push('/');
+            await createUserWithEmailAndPassword(auth, email, password).then(() => {
+                toast.success('Account created successfully');
+                setEmail('');
+                setPassword('')
+                createTicketUser();
+                redirect('/signin');
+            }).catch((error) => {
+                toast.error('Account creation failed');
+            });
+
         } catch (e) {
             console.error(e)
         }

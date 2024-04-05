@@ -4,15 +4,17 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/components/hooks/firebase/config';
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { auth, db } from '@/components/hooks/firebase/config';
 import { useSession } from 'next-auth/react';
-
+import { getAuth } from 'firebase/auth';
+import { get } from 'http';
 export default function GridProf() {
 
 
     const wallet = useWallet();
-    const { data: session } = useSession()
+    const session = useSession();
+
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
@@ -20,21 +22,31 @@ export default function GridProf() {
     }
 
     const getTicketsFire = async () => {
-        // const q = query(collection(db, "tickets"), where("idUser", "==", "sadsdaadsr334"));
-        // onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-        //     snapshot.docChanges().forEach((change) => {
-        //         if (change.type === "added") {
-        //             console.log("New city: ", change.doc.data());
-        //         }
-
-        //         const source = snapshot.metadata.fromCache ? "local cache" : "server";
-        //         console.log("Data came from " + source);
-        //     });
+        const uuid = auth.currentUser?.uid.toString();
+        // ------------------------ POST ------------------------
+        if (uuid) {
+            await setDoc(doc(db, "tickets", uuid), {
+                amount: "0",
+            }).then(() => {
+                console.log("Document successfully written!");
+            }).catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+        }
+        return
+        // ------------------------ GET ------------------------
+        // const docRefCol = collection(db, 'tickets')
+        // const docRefs = doc(docRefCol, 'klHUpQOsvu9KSEh66Yfc')
+        // await getDoc(docRefs).then((doc) => {
+        //     if (doc.exists()) {
+        //         console.log("Document data:", doc.data());
+        //     } else {
+        //         // doc.data() will be undefined in this case
+        //         console.log("No such document!");
+        //     }
+        // }).catch((error) => {
+        //     console.log("Error getting document:");
         // });
-        const querySnapshot = await getDocs(collection(db, "users"));
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-        });
     }
 
     return (
@@ -42,7 +54,7 @@ export default function GridProf() {
             <div className='flex flex-col-reverse lg:flex-row px-8 md:px-24 pt-14 md:pt-0 min-h-screen justify-center items-center gap-16'>
                 <div className='h-[80vh] w-[90%] lg:w-1/2 text-white  rounded-md pt-8 px-1 overflow-y-hidden overflow-y-scroll scrollbar-hidden'>
                     <h1 className='text-base font-mono absolute ml-6 p-1 rounded-xl bg-purple-600 '>Items</h1>
-                    <div className='grid w-full sm:grid-cols-2 gap-4 mb-10 lg:mb-14 p-8 '>
+                    <div className='grid w-full sm:grid-cols-2 gap-1 md:gap-4 mb-10 lg:mb-14 p-2 md:p-8 '>
                         {
                             [1, 2,].map((item, index) => {
                                 return (
@@ -70,7 +82,7 @@ export default function GridProf() {
                         <div className="flex-1 bg-white bg-opacity-5 text-white p-4 shadow rounded-lg md:w-1/2">
                             <h2 className=" text-base font-mono pb-1">Email</h2>
                             <div className="my-1">
-                                {session?.user?.email}
+                                {session?.data?.user?.email}
                             </div>
 
                         </div>

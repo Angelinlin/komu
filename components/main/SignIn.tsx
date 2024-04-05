@@ -1,5 +1,7 @@
 'use client';
+import { createTicketUser } from '@/lib/functions';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -85,9 +87,9 @@ export default function Signin() {
 
                     <p className="mt-10 text-center text-sm text-gray-400">
                         Not a member?{' '}
-                        <button onClick={() => redirect('/signup')} className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
+                        <Link href="/signup" className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
                             Sign Up
-                        </button>
+                        </Link>
                     </p>
                 </div>
             </div>
