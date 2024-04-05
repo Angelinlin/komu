@@ -2,21 +2,23 @@
 import { createTicketUser } from '@/lib/functions';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const route = useRouter();
 
     const handleSignin = async () => {
         await signIn('credentials', { email, password, redirect: true, callbackUrl: '/' })
             .then((response) => {
                 toast.success('Sign in successful');
+                route.push('/');
             })
             .catch((error) => {
-                toast.error('Sign in failed');
+                toast.error('Invalid email or password');
             });
 
     };

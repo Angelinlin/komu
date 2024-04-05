@@ -1,4 +1,5 @@
 import { auth, db } from "@/components/hooks/firebase/config";
+import { Auth } from "firebase-admin/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 
@@ -15,7 +16,7 @@ export const postNftHash = async (nftHash: string, nftName: any) => {
     });
 }
 
-export const createTicketUser = async () => {
+export const createTicketUser = async ({ auth }: { auth: any }) => {
     const uuid = auth.currentUser?.uid.toString();
     if (uuid) {
         const docRef = doc(db, "tickets", uuid);
