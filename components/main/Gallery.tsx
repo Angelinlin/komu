@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Gallery = () => {
   return (
-    <section className="flex items-center mb-20 z-[20]">
+    <section className="flex items-center mb-20 z-[20]" id="gallery">
       <div className="max-w-6xl p-4 mx-auto">
         <h2 className="pb-4 text-2xl font-bold text-center text-gray-blue dark:text-gray-200">
           Gallery

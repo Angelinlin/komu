@@ -7,8 +7,12 @@ import {
   slideInFromTop,
 } from "@/utils/motion";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const Hero = () => {
+
+  const { data: session } = useSession();
 
   return (
     <motion.div
@@ -41,14 +45,31 @@ const Hero = () => {
         </motion.p>
         {/* este boton te mandara para descargar el juego, pero por lo mientras aqui tmb estara el signin */}
         {/* <SignInBut> */}
-        <motion.a
-          variants={slideInFromLeft(1)}
-          className="py-2 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px] "
-        >
-          Get started!
-        </motion.a>
+        {
+          session ?
+            <motion.div className="max-w-[200px]"
+              variants={slideInFromLeft(1)} >
+              <Link
+                href="/komuSection"
+                className="py-2 px-6 button-primary text-center text-white cursor-pointer rounded-lg max-w-[200px] "
+              >
+                Get started!
+              </Link>
+            </motion.div>
+            :
+            <motion.div className="max-w-[200px]"
+              variants={slideInFromLeft(1)} >
+              <Link
+                href="/signin"
+                className="py-2 px-6 button-primary text-center text-white cursor-pointer rounded-lg "
+              >
+                Get started!
+              </Link>
+            </motion.div>
+
+        }
         {/* </SignInBut> */}
-      </div>
+      </div >
 
       <motion.div
         variants={slideInFromRight(0.8)}
@@ -59,7 +80,7 @@ const Hero = () => {
           <Image src="/arcade.jpg" alt="work icons" height={700} width={700} ></Image>
         </div>
       </motion.div>
-    </motion.div>
+    </motion.div >
   );
 };
 

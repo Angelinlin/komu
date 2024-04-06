@@ -4,54 +4,38 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { auth, db } from '@/components/hooks/firebase/config';
 import { useSession } from 'next-auth/react';
-import { getAuth } from 'firebase/auth';
-import { get } from 'http';
+import { getTicketUser } from '@/lib/functions';
+import { auth } from '@/components/hooks/firebase/config';
+
+
 export default function GridProf() {
-
-
     const wallet = useWallet();
     const session = useSession();
-
+    const [tickets, setTickets] = useState(0);
+    const uuid = auth.currentUser?.uid;
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
         toast.success('Wallet copied');
     }
 
-    const getTicketsFire = async () => {
-        const uuid = auth.currentUser?.uid.toString();
-        // ------------------------ POST ------------------------
-        if (uuid) {
-            await setDoc(doc(db, "tickets", uuid), {
-                amount: "0",
-            }).then(() => {
-                console.log("Document successfully written!");
-            }).catch((error) => {
-                console.error("Error writing document: ", error);
-            });
+
+    useEffect(() => {
+        const getTicketsUser = async () => {
+            const data = await getTicketUser(uuid as string);
+            setTickets(data?.amount);
+            console.log(`Se obtuvieron ${data?.amount} tickets.`);
         }
-        return
-        // ------------------------ GET ------------------------
-        // const docRefCol = collection(db, 'tickets')
-        // const docRefs = doc(docRefCol, 'klHUpQOsvu9KSEh66Yfc')
-        // await getDoc(docRefs).then((doc) => {
-        //     if (doc.exists()) {
-        //         console.log("Document data:", doc.data());
-        //     } else {
-        //         // doc.data() will be undefined in this case
-        //         console.log("No such document!");
-        //     }
-        // }).catch((error) => {
-        //     console.log("Error getting document:");
-        // });
-    }
+
+        if (uuid) {
+            getTicketsUser();
+        }
+    }, [uuid])
 
     return (
         <>
-            <div className='flex flex-col-reverse lg:flex-row px-8 md:px-24 pt-14 md:pt-0 min-h-screen justify-center items-center gap-16'>
+            <div className='flex flex-col-reverse lg:flex-row px-8 md:px-24 pt-20 md:pt-0 min-h-screen justify-center items-center gap-16'>
                 <div className='h-[80vh] w-[90%] lg:w-1/2 text-white  rounded-md pt-8 px-1 overflow-y-hidden overflow-y-scroll scrollbar-hidden'>
                     <h1 className='text-base font-mono absolute ml-6 p-1 rounded-xl bg-purple-600 '>Items</h1>
                     <div className='grid w-full sm:grid-cols-2 gap-1 md:gap-4 mb-10 lg:mb-14 p-2 md:p-8 '>
@@ -114,7 +98,7 @@ export default function GridProf() {
                             <div className='flex flex-row gap-4'>
                                 <TicketIcon className='w-6' />
                                 <p className=" my-1">
-                                    550
+                                    {tickets}
                                 </p>
                             </div>
 
@@ -147,43 +131,13 @@ export default function GridProf() {
                                 </tr>
                             </tbody>
                         </table>
-                        <div className="text-right mt-4">
+                        {/* <div className="text-right mt-4">
                             <button onClick={() => { getTicketsFire() }} className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
                                 Ver más
                             </button>
-                        </div>
+                        </div> */}
                     </div>
-                    {/* <div className="mt-8 bg-white p-4 shadow rounded-lg">
-                        <div className="bg-white p-4 rounded-md mt-4">
-                            <h2 className="text-gray-500 text-lg font-semibold pb-4">Transacciones</h2>
-                            <div className="my-1"></div>
-                            <div className="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div>
-                            <table className="w-full table-auto text-sm">
-                                <thead>
-                                    <tr className="text-sm leading-normal">
-                                        <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Nombre</th>
-                                        <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Fecha</th>
-                                        <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-right">Monto</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="hover:bg-grey-lighter">
-                                        <td className="py-2 px-4 border-b border-grey-light">Carlos Sánchez</td>
-                                        <td className="py-2 px-4 border-b border-grey-light">27/07/2023</td>
-                                        <td className="py-2 px-4 border-b border-grey-light text-right">$1500</td>
-                                    </tr>
-                                </tbody>
-                            </table>
 
-                            <div className="text-right mt-4">
-                                <div className="text-right mt-4">
-                                    <button className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-                                        Ver más
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                 </div >
             </div>
         </>

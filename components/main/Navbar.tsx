@@ -56,13 +56,13 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#FaQs">
-                  <p className={navBarStyles}>FaQs</p>
+                <Link href="#gallery">
+                  <p className={navBarStyles}>Gallery</p>
                 </Link>
               </li>
               <li>
-                <Link href="#contact">
-                  <p className={navBarStyles}>Contact</p>
+                <Link href="#FaQs">
+                  <p className={navBarStyles}>FaQs</p>
                 </Link>
               </li>
 

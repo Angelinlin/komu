@@ -1,11 +1,12 @@
-import { auth, db } from "@/components/hooks/firebase/config";
-import { Auth } from "firebase-admin/auth";
+"use server";
+import { db } from "@/components/hooks/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 
 // Post
-export const postNftHash = async (nftHash: string, nftName: any) => {
-    await setDoc(doc(db, "tickets", "aaaaaaaaa"), {
+export const postNftHash = async (uuid: string, nftHash: string, nftName: string, nftDlc: string) => {
+
+    await setDoc(doc(db, "nft", uuid), {
         name: "Los Angeles",
         state: "CA",
         country: "USA"
@@ -16,15 +17,15 @@ export const postNftHash = async (nftHash: string, nftName: any) => {
     });
 }
 
-export const createTicketUser = async ({ auth }: { auth: any }) => {
-    const uuid = auth.currentUser?.uid.toString();
+// Create Ticket User (initial: 0)
+export const createTicketUser = async (uuid: string) => {
     if (uuid) {
         const docRef = doc(db, "tickets", uuid);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
             await setDoc(docRef, {
-                amount: "0",
+                amount: 100,
             }).then(() => {
                 console.log("Document successfully written!");
             }).catch((error) => {
@@ -32,6 +33,21 @@ export const createTicketUser = async ({ auth }: { auth: any }) => {
             });
         } else {
             console.log("Document already exists!");
+        }
+    }
+    return
+}
+
+// Get Ticket User
+export const getTicketUser = async (uuid: string) => {
+    if (uuid) {
+        const docRef = doc(db, "tickets", uuid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            console.log("No such document!");
         }
     }
     return
