@@ -32,7 +32,7 @@ const SignUp = () => {
                 toast.success('Account created successfully');
                 setEmail('');
                 setPassword('')
-                createTicketUser({ auth });
+                createTicketUser(auth.currentUser?.uid as string);
                 route.push('/signin');
             }).catch((error) => {
                 console.log(error)
