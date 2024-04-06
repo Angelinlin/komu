@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiAlignJustify } from "react-icons/fi";
 import { useSession, signOut } from "next-auth/react";
+import { signOut as asign } from "firebase/auth";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -75,9 +76,9 @@ const Navbar = () => {
                             Market
                           </div>
                         </Link>
-                        <div className='h-full w-32 items-center justify-center md:block hidden'>
+                        <div className='h-full w-32 items-center justify-center flex'>
                           <button className='text-white cursor-pointer hover:text-red-300 transition duration-300 border-b-2 border-transparent hover:border-red-500'
-                            onClick={() => { signOut() }}>
+                            onClick={() => { signOut(), asign }}>
                             Sign out
                           </button>
                         </div>
@@ -108,7 +109,7 @@ const Navbar = () => {
                 </Link>
                 <div className='h-full w-32 items-center justify-center md:block hidden'>
                   <button className='text-white cursor-pointer hover:text-red-300 transition duration-300 border-b-2 border-transparent hover:border-red-500'
-                    onClick={() => { signOut() }}>
+                    onClick={() => { signOut(), asign }}>
                     Sign out
                   </button>
                 </div>
