@@ -26,6 +26,7 @@ export default function GridProf() {
         try {
             const ticketss = await getTicketUser(uuid as string);
             setTickets(ticketss as number);
+            console.log('Tickets:', ticketss)
         } catch (error) {
             console.error('Failed to get tickets:', error);
         }
@@ -33,7 +34,7 @@ export default function GridProf() {
 
     useEffect(() => {
         getTicketUsser()
-    }, [getTicketUsser])
+    }, [getTicketUsser, uuid])
 
     return (
         <>
