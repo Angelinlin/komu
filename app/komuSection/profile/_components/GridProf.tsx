@@ -25,12 +25,9 @@ export default function GridProf() {
 
     const getTicketUsser = async () => {
         await getTicketUser(uuid as string).then((doc) => {
-            if (doc && doc.amount) {
-                const docData = doc.amount
-                setTickets(docData)
-            } else {
-                console.error('Document or amount is undefined');
-            }
+            const docData = doc?.amount
+            setTickets(docData)
+
         }).catch((error) => {
             console.error(error);
         });
