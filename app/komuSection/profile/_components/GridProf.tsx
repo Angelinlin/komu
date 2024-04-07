@@ -1,13 +1,12 @@
 "use client"
 import { useWallet } from '@solana/wallet-adapter-react';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
 import { auth } from '@/components/hooks/firebase/config';
-import { revalidatePath } from 'next/cache';
 
 
 
@@ -22,19 +21,18 @@ export default function GridProf() {
         toast.success('Wallet copied');
     }
 
-    const getTicketUsser = useCallback(async () => {
-        try {
-            const ticketss = await getTicketUser(uuid as string);
-            setTickets(ticketss as number);
-            console.log('Tickets:', ticketss)
-        } catch (error) {
-            console.error('Failed to get tickets:', error);
-        }
-    }, [uuid]);
+    const getTicketUsser = async () => {
+        await getTicketUser(uuid as string).then((doc) => {
+            console.log(doc)
+            setTickets(doc!.amount)
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
 
     useEffect(() => {
         getTicketUsser()
-    }, [getTicketUsser, uuid])
+    }, [])
 
     return (
         <>
@@ -109,7 +107,7 @@ export default function GridProf() {
                             <div className='flex flex-row gap-4'>
                                 <TicketIcon className='w-6' />
                                 <p className=" my-1">
-                                    {tickets ? tickets : 0}
+                                    {tickets}
                                 </p>
                             </div>
 
@@ -142,11 +140,11 @@ export default function GridProf() {
                                 </tr>
                             </tbody>
                         </table>
-                        {/* <div className="text-right mt-4">
-                            <button onClick={() => { getTicketsFire() }} className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
+                        <div className="text-right mt-4">
+                            <button onClick={() => { getTicketUsser() }} className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
                                 Ver más
                             </button>
-                        </div> */}
+                        </div>
                     </div>
 
                 </div >
