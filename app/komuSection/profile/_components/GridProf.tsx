@@ -23,8 +23,8 @@ export default function GridProf() {
 
     const getTicketUsser = async () => {
         await getTicketUser(uuid as string).then((doc) => {
-            console.log(doc)
-            setTickets(doc!.amount)
+            const docData = doc!.amount
+            setTickets(docData)
         }).catch((error) => {
             console.error(error);
         });
@@ -76,19 +76,19 @@ export default function GridProf() {
                             <h2 className=" text-base font-mono pb-1">Wallet</h2>
                             <div className='flex flex-row gap-4'>
                                 <WalletIcon className='w-6' />
-                                <button className='w-1/2' onClick={copyWallet}>
 
-                                    {
-                                        wallet.connected ?
+                                {
+                                    wallet.connected ?
+                                        <button className='w-1/2' onClick={copyWallet}>
                                             <p className="my-1 text-sm truncate hover:text-purple-400 transition duration-200">
                                                 {wallet.publicKey?.toString()}
                                             </p>
-                                            :
-                                            <p className='text-xs flex items-center justify-center'>
-                                                Not connected
-                                            </p>
-                                    }
-                                </button>
+                                        </button>
+                                        :
+                                        <p className='text-xs flex items-center justify-center'>
+                                            Not connected
+                                        </p>
+                                }
                             </div>
                         </div>
                     </div>
