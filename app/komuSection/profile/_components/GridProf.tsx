@@ -6,7 +6,8 @@ import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
-import { auth } from '@/components/hooks/firebase/config';
+import { auth, db } from '@/components/hooks/firebase/config';
+import { doc, getDoc } from 'firebase/firestore';
 
 type tickets = {
     amount: number
@@ -24,13 +25,18 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        await getTicketUser(uuid as string).then((doc) => {
-            const docData = doc?.amount
-            setTickets(docData)
-            console.log(docData)
-        }).catch((error) => {
-            console.error(error);
-        });
+        if (uuid) {
+            const docRef = doc(db, "tickets", uuid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                setTickets(data?.amount);
+                console.log(data?.amount)
+            } else {
+                console.log("No such document!");
+            }
+        }
     }
 
     useEffect(() => {
