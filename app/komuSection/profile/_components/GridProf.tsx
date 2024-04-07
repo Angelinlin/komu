@@ -27,7 +27,7 @@ export default function GridProf() {
         await getTicketUser(uuid as string).then((doc) => {
             const docData = doc?.amount
             setTickets(docData)
-
+            console.log(docData)
         }).catch((error) => {
             console.error(error);
         });
