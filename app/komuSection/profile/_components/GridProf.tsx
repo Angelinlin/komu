@@ -8,7 +8,9 @@ import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
 import { auth } from '@/components/hooks/firebase/config';
 
-
+type tickets = {
+    amount: number
+}
 
 export default function GridProf() {
     const wallet = useWallet();
@@ -23,8 +25,12 @@ export default function GridProf() {
 
     const getTicketUsser = async () => {
         await getTicketUser(uuid as string).then((doc) => {
-            const docData = doc!.amount
-            setTickets(docData)
+            if (doc && doc.amount) {
+                const docData = doc.amount
+                setTickets(docData)
+            } else {
+                console.error('Document or amount is undefined');
+            }
         }).catch((error) => {
             console.error(error);
         });
@@ -66,9 +72,9 @@ export default function GridProf() {
                     <div className=" flex flex-wrap space-x-0 gap-2 md:space-y-0">
                         <div className="flex-1 bg-white bg-opacity-5 text-white p-4 shadow rounded-lg md:w-1/2">
                             <h2 className=" text-base font-mono pb-1">Email</h2>
-                            <div className="my-1">
+                            <p className="my-1 truncate">
                                 {session?.data?.user?.email}
-                            </div>
+                            </p>
 
                         </div>
 
