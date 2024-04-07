@@ -25,17 +25,18 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        if (uuid) {
-            const docRef = doc(db, "tickets", uuid);
-            const docSnap = await getDoc(docRef);
+        if (!uuid) {
+            return console.log('No user');
+        }
+        const docRef = doc(db, "tickets", uuid);
+        const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                setTickets(data?.amount);
-                console.log(data?.amount)
-            } else {
-                console.log("No such document!");
-            }
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            setTickets(data?.amount);
+            console.log(data?.amount)
+        } else {
+            console.log("No such document!");
         }
     }
 
