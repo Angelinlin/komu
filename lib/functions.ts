@@ -45,7 +45,7 @@ export const getTicketUser = async (uuid: string) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            return docSnap.data();
+            return docSnap.data().amount;
         } else {
             console.log("No such document!");
         }

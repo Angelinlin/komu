@@ -1,12 +1,14 @@
 "use client"
 import { useWallet } from '@solana/wallet-adapter-react';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
 import { auth } from '@/components/hooks/firebase/config';
+import { revalidatePath } from 'next/cache';
+
 
 
 export default function GridProf() {
@@ -20,18 +22,18 @@ export default function GridProf() {
         toast.success('Wallet copied');
     }
 
+    const getTicketUsser = useCallback(async () => {
+        try {
+            const ticketss = await getTicketUser(uuid as string);
+            setTickets(ticketss as number);
+        } catch (error) {
+            console.error('Failed to get tickets:', error);
+        }
+    }, [uuid]);
 
     useEffect(() => {
-        const getTicketsUser = async () => {
-            const data = await getTicketUser(uuid as string);
-            setTickets(data?.amount);
-            console.log(`Se obtuvieron ${data?.amount} tickets.`);
-        }
-
-        if (uuid) {
-            getTicketsUser();
-        }
-    }, [uuid])
+        getTicketUsser()
+    }, [getTicketUsser])
 
     return (
         <>
@@ -76,9 +78,17 @@ export default function GridProf() {
                             <div className='flex flex-row gap-4'>
                                 <WalletIcon className='w-6' />
                                 <button className='w-1/2' onClick={copyWallet}>
-                                    <p className="my-1 text-sm truncate hover:text-purple-400 transition duration-200">
-                                        {wallet.publicKey?.toString()}
-                                    </p>
+
+                                    {
+                                        wallet.connected ?
+                                            <p className="my-1 text-sm truncate hover:text-purple-400 transition duration-200">
+                                                {wallet.publicKey?.toString()}
+                                            </p>
+                                            :
+                                            <p className='text-xs flex items-center justify-center'>
+                                                Not connected
+                                            </p>
+                                    }
                                 </button>
                             </div>
                         </div>
@@ -98,7 +108,7 @@ export default function GridProf() {
                             <div className='flex flex-row gap-4'>
                                 <TicketIcon className='w-6' />
                                 <p className=" my-1">
-                                    {tickets}
+                                    {tickets ? tickets : 0}
                                 </p>
                             </div>
 
