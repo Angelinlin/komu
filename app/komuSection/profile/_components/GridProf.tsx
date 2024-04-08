@@ -8,16 +8,22 @@ import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
 import { auth, db } from '@/components/hooks/firebase/config';
 import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
-type tickets = {
-    amount: number
-}
 
 export default function GridProf() {
     const wallet = useWallet();
     const session = useSession();
     const [tickets, setTickets] = useState(0);
-    const uuid = auth.currentUser?.uid;
+    const [uuid, setUuid] = useState('' as string);
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log('User is signed in')
+            setUuid(user.uid);
+        } else {
+            console.log('No user is signed in')
+        }
+    });
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
@@ -28,6 +34,7 @@ export default function GridProf() {
         if (!uuid) {
             return console.log('No user');
         }
+        console.log(uuid)
         const docRef = doc(db, "tickets", uuid);
         const docSnap = await getDoc(docRef);
 
