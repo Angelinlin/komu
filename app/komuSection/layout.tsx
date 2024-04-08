@@ -14,11 +14,13 @@ export default function KomuSectionLayout({
         <>
             <section className=" bg-[#030014] overflow-x-hidden scrollbar-hidden">
                 <ToasterContext>
-                    <Wallet>
-                        <Navibar />
-                        {children}
-                        <Footer />
-                    </Wallet>
+                    <SessionProvider>
+                        <Wallet>
+                            <Navibar />
+                            {children}
+                            <Footer />
+                        </Wallet>
+                    </SessionProvider>
                 </ToasterContext>
             </section>
         </>

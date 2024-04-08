@@ -20,6 +20,7 @@ export default function GridProf() {
         if (user) {
             console.log('User is signed in')
             setUuid(user.uid);
+
         } else {
             console.log('No user is signed in')
         }
