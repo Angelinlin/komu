@@ -5,7 +5,10 @@ import { toast } from 'sonner';
 import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-import { getTicketUser } from '@/lib/functions';
+import { getNftUser, getTicketUser } from '@/lib/functions';
+import { DocumentData } from 'firebase-admin/firestore';
+import { Metadata, Metaplex } from '@metaplex-foundation/js';
+import { Connection } from '@solana/web3.js';
 
 interface User {
     name?: string | null;
@@ -17,8 +20,13 @@ interface User {
 export default function GridProf() {
     const wallet = useWallet();
     const session = useSession();
+    const connection = new Connection("https://api.devnet.solana.com");
+    const metaplex = new Metaplex(connection);
     const user = session?.data?.user as User;
     const [tickets, setTickets] = useState(0);
+    const [nfts, setNfts] = useState<DocumentData[]>();
+
+    const [nftArray, setNftArray] = useState<any[]>([]);
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
@@ -26,19 +34,65 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        getTicketUser(user.uid).then((data) => {
-            if (data) {
-                setTickets(data.amount);
-            } else {
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.error("Error getting document: ", error);
-        })
+        if (user.uid) {
+            getTicketUser(user.uid).then((data) => {
+                if (data) {
+                    setTickets(data.amount);
+                } else {
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.error("Error getting document: ", error);
+            })
+        }
+    }
+
+    const getNftsUser = async () => {
+        if (user.uid) {
+            getNftUser(user.uid).then((data) => {
+                if (data) {
+                    setNfts(data);
+                    getNftsWallet(data)
+                } else {
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.error("Error getting document: ", error);
+            })
+        }
+    }
+
+    const getNftsWallet = async (nftDataBase: DocumentData[]) => {
+        if (wallet.publicKey) {
+            const nftData = await metaplex.nfts().findAllByOwner({ owner: wallet.publicKey });
+            nftData.map(async (nft) => {
+                try {
+                    const mintAddress = (nft as Metadata).mintAddress.toBase58();
+                    if (nftDataBase) {
+                        const existsInNftsUser = nftDataBase.some(nftItem => nftItem.hashnft === mintAddress);
+                        if (existsInNftsUser) {
+                            console.log(`NFT with mintAddress ${mintAddress} exists in nftsUser`);
+                            await fetch(nft.uri).then(async (response) => {
+                                const data = await response.json();
+                                console.log(data);
+                                setNftArray(prevNfts => [...prevNfts, data]);
+                            });
+                        }
+                    } else {
+                        console.log('nfts is undefined or null');
+                    }
+                } catch (error) {
+                    // Handle individual fetch error here
+                    console.error("Error fetching NFT data:", error);
+                }
+            });
+        }
     }
 
     useEffect(() => {
         getTicketUsser()
+        getNftsUser()
+        console.log(nftArray)
     }, [])
 
     return (
@@ -48,21 +102,21 @@ export default function GridProf() {
                     <h1 className='text-base font-mono absolute ml-6 p-1 rounded-xl bg-purple-600 '>Items</h1>
                     <div className='grid w-full sm:grid-cols-2 gap-1 md:gap-4 mb-10 lg:mb-14 p-2 md:p-8 '>
                         {
-                            [1, 2,].map((item, index) => {
+                            nftArray.map((item, index) => {
                                 return (
-                                    <a key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800" href="#">
+                                    <div key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800">
                                         <div className="aspect-w-16 aspect-h-9">
-                                            <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src="/FisrtTouch.png" alt="Image Description" />
+                                            <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src={item.image} alt="Image Description" />
                                         </div>
                                         <div className="p-4 md:p-5">
                                             <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                                                Komu
+                                                {item.description}
                                             </p>
                                             <h3 className="mt-2 text-xs font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white">
-                                                First touch
+                                                {item.name}
                                             </h3>
                                         </div>
-                                    </a>
+                                    </div>
                                 )
                             })
                         }
@@ -130,28 +184,26 @@ export default function GridProf() {
                                 <tr className="text-sm leading-normal">
                                     <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Name</th>
                                     <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">DLC</th>
-                                    <th className="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="hover:bg-grey-lighter text-center">
-                                    <td className="py-2 px-4 border-b border-grey-light">
-                                        First touch
-                                    </td>
-                                    <td className="py-2 px-4 border-b border-grey-light">
-                                        Space
-                                    </td>
-                                    <td className="py-2 px-4 border-b border-grey-light">
-                                        2
-                                    </td>
-                                </tr>
+                                {
+                                    nfts?.map((nft, index) => {
+                                        return (
+                                            <tr key={index} className="text-grey-darkest text-center">
+                                                <td className="py-2 px-4 border-b border-grey-light">{nft.name}</td>
+                                                <td className="py-2 px-4 border-b border-grey-light">{nft.dlc}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </table>
-                        <div className="text-right mt-4">
+                        {/* <div className="text-right mt-4">
                             <button onClick={() => { getTicketUsser() }} className="bg-purple-600 hover:bg-purple-800 transition duration-300 text-white font-semibold py-2 px-4 rounded">
                                 Ver más
                             </button>
-                        </div>
+                        </div> */}
                     </div>
 
                 </div >

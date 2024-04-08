@@ -14,7 +14,7 @@ type Props = {
     children?: React.ReactNode;
 };
 
-export const Wallet: FC<Props> = ({children}) => {
+export const Wallet: FC<Props> = ({ children }) => {
     // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
     const network = WalletAdapterNetwork.Devnet;
 
@@ -23,7 +23,7 @@ export const Wallet: FC<Props> = ({children}) => {
 
     const wallets = useMemo(
         () => [
-            
+
         ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [network]

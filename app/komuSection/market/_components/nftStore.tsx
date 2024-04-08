@@ -11,6 +11,7 @@ import greenB from '@/public/greenB.json';
 import redB from '@/public/redB.json';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import { postNftHash } from '@/lib/functions';
 
 type Nft = {
     name: string,
@@ -20,18 +21,22 @@ type Nft = {
     metadata?: string
 }
 
+interface User {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    uid: string;
+}
+
 export default function NftStore() {
-
-
-    // if (!user) {
-    //     toast.error('You are not logged in');
-    //     router.push('/login');
-    // }
 
     const wallet = useWallet();
     const clusterString = "devnet";
     const url = process.env.RPC_URL;
     const publicKeyCreator = new PublicKey('9tMv2JKCzwXbYx5Eey3NpqNYaTjeTcpLSXZYeEmUdXP2');
+
+    const session = useSession();
+    const user = session?.data?.user as User;
 
     const connection = new Connection(clusterApiUrl(clusterString))
     const metaplex = Metaplex.make(connection)
@@ -66,9 +71,14 @@ export default function NftStore() {
         try {
             // Submit the transaction
             const { signature } = await metaplex.rpc().sendAndConfirmTransaction(nftBuilder, { commitment: 'confirmed' });
-            // const { mintAddress } = nftBuilder.getContext();
-            // console.log(mintAddress.toBase58())
-            // console.log(signature)
+            const { mintAddress } = nftBuilder.getContext();
+            if (signature) {
+                await postNftHash(user.uid, mintAddress.toString(), "First touch", "Space").then(() => {
+                    console.log("Success")
+                }).catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
+            }
             toast.dismiss();
             console.log(signature)
         } catch (e) {
@@ -129,7 +139,10 @@ export default function NftStore() {
         <>
             <div className="pt-20 flex items-center justify-cente">
                 <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:max-w-7xl lg:px-8 text-center">
-                    <h2 className="text-2xl font-extrabold tracking-tight text-zinc-100 pb-8">Our nfts</h2>
+                    <div className='text-2xl font-extrabold tracking-tight text-zinc-100 pb-8'>
+                        <h2 className="">Our nfts</h2>
+                        <span className='text-white text-xs font-thin'>ONLY IN DEVNET</span>
+                    </div>
                     <div className='pb-4'>
                         <WalletButton />
                     </div>
