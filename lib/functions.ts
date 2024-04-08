@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/components/hooks/firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { generateUUID } from "three/src/math/MathUtils.js";
 
 
 // Post
@@ -20,11 +21,12 @@ export const postNftHash = async (uuid: string, nftHash: string, nftName: string
 // Create Ticket User (initial: 0)
 export const createTicketUser = async (uuid: string) => {
     if (uuid) {
-        const docRef = doc(db, "tickets", uuid);
+        const docRef = doc(db, "tickets", generateUUID());
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
             await setDoc(docRef, {
+                userID: uuid,
                 amount: 100,
             }).then(() => {
                 console.log("Document successfully written!");

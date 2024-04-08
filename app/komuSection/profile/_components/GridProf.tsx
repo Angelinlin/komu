@@ -6,8 +6,7 @@ import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
-import { auth, db } from '@/components/hooks/firebase/config';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '@/components/hooks/firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
 
 
@@ -16,6 +15,7 @@ export default function GridProf() {
     const session = useSession();
     const [tickets, setTickets] = useState(0);
     const [uuid, setUuid] = useState("");
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log('User is signed in')
@@ -35,17 +35,25 @@ export default function GridProf() {
         // if (uuid === "") {
         //     return console.log('No user');
         // }
-        console.log(uuid)
-        const docRef = doc(db, "tickets", uuid);
-        const docSnap = await getDoc(docRef);
+        // console.log(uuid)
+        // const docRef = doc(db, "tickets", uuid);
+        // const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            setTickets(data?.amount);
-            console.log(data?.amount)
-        } else {
-            console.log("No such document!");
-        }
+        // if (docSnap.exists()) {
+        //     const data = docSnap.data();
+        //     setTickets(data?.amount);
+        //     console.log(data?.amount)
+        // } else {
+        //     console.log("No such document!");
+        // }
+        getTicketUser(uuid).then((data) => {
+            if (data) {
+                console.log(data)
+                setTickets(data.amount);
+            } else {
+                console.log("No such document!");
+            }
+        })
     }
 
     useEffect(() => {
