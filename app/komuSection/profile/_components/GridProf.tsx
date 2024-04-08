@@ -34,7 +34,7 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        if (user.uid) {
+        if (session) {
             getTicketUser(user.uid).then((data) => {
                 if (data) {
                     setTickets(data.amount);
@@ -48,7 +48,7 @@ export default function GridProf() {
     }
 
     const getNftsUser = async () => {
-        if (user.uid) {
+        if (session) {
             getNftUser(user.uid).then((data) => {
                 if (data) {
                     setNfts(data);
@@ -102,23 +102,28 @@ export default function GridProf() {
                     <h1 className='text-base font-mono absolute ml-6 p-1 rounded-xl bg-purple-600 '>Items</h1>
                     <div className='grid w-full sm:grid-cols-2 gap-1 md:gap-4 mb-10 lg:mb-14 p-2 md:p-8 '>
                         {
-                            nftArray.map((item, index) => {
-                                return (
-                                    <div key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800">
-                                        <div className="aspect-w-16 aspect-h-9">
-                                            <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src={item.image} alt="Image Description" />
+                            (nftArray.length > 0) ?
+                                nftArray.map((item, index) => {
+                                    return (
+                                        <div key={index} className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800">
+                                            <div className="aspect-w-16 aspect-h-9">
+                                                <Image width={300} height={150} className="w-full object-cover rounded-t-xl" src={item.image} alt="Image Description" />
+                                            </div>
+                                            <div className="p-4 md:p-5">
+                                                <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
+                                                    {item.description}
+                                                </p>
+                                                <h3 className="mt-2 text-xs font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white">
+                                                    {item.name}
+                                                </h3>
+                                            </div>
                                         </div>
-                                        <div className="p-4 md:p-5">
-                                            <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                                                {item.description}
-                                            </p>
-                                            <h3 className="mt-2 text-xs font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white">
-                                                {item.name}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                )
-                            })
+                                    )
+                                })
+                                :
+                                <div className='flex h-full w-full items-center justify-center'>
+                                    <p className='text-xs'>No nfts</p>
+                                </div>
                         }
 
                     </div>
