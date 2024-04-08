@@ -53,6 +53,8 @@ export default function GridProf() {
             } else {
                 console.log("No such document!");
             }
+        }).catch((error) => {
+            console.error("Error getting document: ", error);
         })
     }
 
