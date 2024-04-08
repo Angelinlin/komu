@@ -6,25 +6,20 @@ import { WalletIcon, TicketIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { getTicketUser } from '@/lib/functions';
-import { auth } from '@/components/hooks/firebase/config';
-import { onAuthStateChanged } from 'firebase/auth';
 
+interface User {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    uid: string;
+}
 
 export default function GridProf() {
     const wallet = useWallet();
     const session = useSession();
+    const user = session?.data?.user as User;
     const [tickets, setTickets] = useState(0);
     const [uuid, setUuid] = useState("");
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log('User is signed in')
-            setUuid(user.uid);
-
-        } else {
-            console.log('No user is signed in')
-        }
-    });
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
@@ -32,21 +27,8 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        // if (uuid === "") {
-        //     return console.log('No user');
-        // }
-        // console.log(uuid)
-        // const docRef = doc(db, "tickets", uuid);
-        // const docSnap = await getDoc(docRef);
-
-        // if (docSnap.exists()) {
-        //     const data = docSnap.data();
-        //     setTickets(data?.amount);
-        //     console.log(data?.amount)
-        // } else {
-        //     console.log("No such document!");
-        // }
-        getTicketUser(uuid).then((data) => {
+        console.log(user.uid)
+        getTicketUser(user.uid).then((data) => {
             if (data) {
                 console.log(data)
                 setTickets(data.amount);
@@ -56,6 +38,7 @@ export default function GridProf() {
         }).catch((error) => {
             console.error("Error getting document: ", error);
         })
+        console.log(uuid)
     }
 
     useEffect(() => {

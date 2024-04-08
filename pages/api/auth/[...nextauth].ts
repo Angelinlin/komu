@@ -25,5 +25,21 @@ export const authOptions = {
             }
         })
     ],
+    callbacks: {
+        async jwt({ user, token }: { user: any, token: any }) {
+            //   update token with ID for front-end if user exists
+            if (user) {
+                token.uid = user.uid;
+                return token;
+            }
+
+            return token;
+        },
+        async session({ session, token }: { session: any, token: any }) {
+            //  update session with uid from token
+            session.user.uid = token.uid;
+            return session;
+        },
+    },
 }
 export default NextAuth(authOptions)
