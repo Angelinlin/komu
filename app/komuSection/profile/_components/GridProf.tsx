@@ -15,7 +15,7 @@ export default function GridProf() {
     const wallet = useWallet();
     const session = useSession();
     const [tickets, setTickets] = useState(0);
-    const [uuid, setUuid] = useState('' as string);
+    const [uuid, setUuid] = useState("");
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log('User is signed in')
@@ -31,7 +31,7 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        if (!uuid) {
+        if (uuid === "") {
             return console.log('No user');
         }
         console.log(uuid)
