@@ -19,7 +19,6 @@ export default function GridProf() {
     const session = useSession();
     const user = session?.data?.user as User;
     const [tickets, setTickets] = useState(0);
-    const [uuid, setUuid] = useState("");
 
     const copyWallet = () => {
         navigator.clipboard.writeText(wallet.publicKey?.toString() as string);
@@ -27,10 +26,8 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        console.log(user.uid)
         getTicketUser(user.uid).then((data) => {
             if (data) {
-                console.log(data)
                 setTickets(data.amount);
             } else {
                 console.log("No such document!");
@@ -38,7 +35,6 @@ export default function GridProf() {
         }).catch((error) => {
             console.error("Error getting document: ", error);
         })
-        console.log(uuid)
     }
 
     useEffect(() => {
