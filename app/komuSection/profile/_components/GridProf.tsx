@@ -31,9 +31,9 @@ export default function GridProf() {
     }
 
     const getTicketUsser = async () => {
-        if (uuid === "") {
-            return console.log('No user');
-        }
+        // if (uuid === "") {
+        //     return console.log('No user');
+        // }
         console.log(uuid)
         const docRef = doc(db, "tickets", uuid);
         const docSnap = await getDoc(docRef);
