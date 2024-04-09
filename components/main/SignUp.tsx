@@ -110,11 +110,6 @@ const SignUp = () => {
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
                                 Password
                             </label>
-                            <div className="text-sm">
-                                <Link href='/forgotPass' className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
-                                    Forgot password?
-                                </Link>
-                            </div>
                         </div>
                         <div className="mt-2">
                             <input

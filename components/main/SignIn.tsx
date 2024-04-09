@@ -66,9 +66,9 @@ export default function Signin() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <div onClick={() => redirect('/forgot-password')} className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
+                                    <Link href='/forgotPass' className="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
                                         Forgot password?
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="mt-2">
