@@ -154,7 +154,7 @@ const SignUp = () => {
                 </div>
 
                 <p className="mt-10 text-center text-sm text-gray-400">
-                    Not a member?{' '}
+                    Do you have an account??{' '}
                     <Link href="/signin" className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
                         Sign in
                     </Link>
