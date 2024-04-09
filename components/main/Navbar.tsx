@@ -66,6 +66,12 @@ const Navbar = () => {
                 </Link>
               </li>
 
+              <li>
+                <Link href="#contact">
+                  <p className={navBarStyles}>Contact</p>
+                </Link>
+              </li>
+
               <li className="block md:hidden items-center justify-center">
                 <div className="w-full h-full flex items-center justify-center flex-col gap-2">
                   {
