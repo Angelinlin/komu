@@ -16,7 +16,7 @@ export default function Home() {
           <About />
           <Gallery />
           <FaQs />
-          {/* <ContactUs /> */}
+          <ContactUs />
           {/* <MapSection /> */}
           <Footer />
         </div>
